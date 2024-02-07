@@ -17,7 +17,7 @@ Contact: Dingfan Chen ([dingfan.chen@cispa.de](mailto:dingfan.chen@cispa.de)), M
 
 ## Citation
 ```bibtex
-@article{afonja2023margctgan,
+@article{chen,oestreich,afonja2024,
   title={Towards Biologically Plausible and Private Gene Expression Data Generation},
   author={Chen, Dingfan and Oestreich, Marie and Afonja, Tejumade and Kerkouche, Raouf and Becker, Matthias and Fritz, Mario},
   journal={arXiv preprint arXiv:2307.07997},
