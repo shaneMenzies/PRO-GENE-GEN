@@ -9,12 +9,14 @@
 
 This repository contains the implementation for ["Towards Biologically Plausible and Private Gene Expression Data Generation" (PoPETs 2024)](https://arxiv.org/pdf/2402.04912.pdf).
 
-*Authors: Dingfan Chen, Marie Oestreich, Tejumade Afonja, Raouf Kerkouche, Matthias Becker, and Mario Fritz*
+*Authors: \*Dingfan Chen, \*Marie Oestreich, \*Tejumade Afonja, Raouf Kerkouche, Matthias Becker, and Mario Fritz* (\*: equal authorship)
 
 Contact: Dingfan Chen ([dingfan.chen@cispa.de](mailto:dingfan.chen@cispa.de)), Marie Oestreich ([Marie.Oestreich@dzne.de](mailto:marie.oestreich@dzne.de)), or Tejumade Afonja ([tejumade.afonja@cispa.de](mailto:tejumade.afonja@cispa.de))
 
+
+
 ## Requirements
-This implementation is based on [PyTorch](https://www.anaconda.com/download/) (tested for version 2.2.0). Please refer to [requirements.txt](requirements.txt) for the other required packages and version.  
+This implementation is based on [PyTorch](https://pytorch.org/) (tested for version 2.2.0). Please refer to [requirements.txt](./requirements.txt) for the other required packages and version.  
 
 ## Setup
 - Create a virtual environment
