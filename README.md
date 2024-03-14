@@ -42,8 +42,8 @@ You can be download the dataset [here](https://dl.cispa.de/s/X2AnxmLrmGtQk7X). W
 ## Running Experiments
 We investigated 5 representative generative models `VAE`, `GAN`, `Private-PGM`, `PrivSyn`, and `Ron-Gauss`.
 
-### VAE-API
-Change to the [vae](./vae) directory. 
+### API
+Change to the model directory e.g [vae](./vae)  
 
         cd vae
 
@@ -51,7 +51,7 @@ You can train the model by running the bash script;
 
         bash loop.sh
 
-To run the membership inference attack;
+For vae model, we provide script to run the membership inference attack;
 
         bash loop_mia.sh
 
