@@ -44,6 +44,7 @@ We investigated 5 representative generative models `VAE`, `GAN`, `Private-PGM`, 
 
 ### VAE-API
 Change to the [vae](./vae) directory. 
+
         cd vae
 
 You can train the model by running the bash script;
