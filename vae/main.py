@@ -349,6 +349,7 @@ def main():
         try:
             model.load_state_dict(torch.load(save_path))  # load model
         except:
+            print("unable to load model.")
             pass
 
         ### eval
@@ -491,26 +492,20 @@ def main():
                     ]
                 )
 
-            ### Save/update the checkpoint during training
-            save_dict = {
-                "iter": iters,
-                "model_state_dict": model.state_dict(),
-                "opt_state_dict": opt.state_dict(),
-            }
-            torch.save(save_dict, os.path.join(save_dir, "checkpoint.pkl"))
-            model.state_dict()
+        ### Save/update the checkpoint during training
+        save_dict = {
+            "iter": iters,
+            "model_state_dict": model.state_dict(),
+            "opt_state_dict": opt.state_dict(),
+        }
+        torch.save(save_dict, os.path.join(save_dir, "checkpoint.pkl"))
+        model.state_dict()
 
         ### Save the best model
         if args.if_save_model:
             if loss < min_loss:
                 min_loss = loss
-                # torch.save(model.state_dict(), save_path)
-                save_dict = {
-                    "iter": iters,
-                    "model_state_dict": model.state_dict(),
-                    "opt_state_dict": opt.state_dict(),
-                }
-                torch.save(save_dict, os.path.join(save_dir, "checkpoint.pkl"))
+                torch.save(model.state_dict(), save_path)
 
         if args.if_verbose:
             ### Plot results during training

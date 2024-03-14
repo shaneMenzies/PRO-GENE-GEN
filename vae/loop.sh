@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+MODE=non-dp
 MODE=dp
 
 z_dim=64
