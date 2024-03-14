@@ -43,7 +43,7 @@ You can be download the dataset [here](https://dl.cispa.de/s/X2AnxmLrmGtQk7X). W
 We investigated 5 representative generative models `VAE`, `GAN`, `Private-PGM`, `PrivSyn`, and `Ron-Gauss`.
 
 ### VAE-API
-Change to the `vae` directory. 
+Change to the [vae](./vae) directory. 
         cd vae
 
 You can train the model by running the bash script;
