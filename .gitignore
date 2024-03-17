@@ -5,8 +5,12 @@ data/aml/norm_counts_AML.txt
 vae/results
 dp_wgan/results
 Private_PGM/results
+dpsyn/results
 vae/__pycache__
 dp_wgan/__pycache__
 Private_PGM/__pycache__
+dpsyn/__pycache__
 Private_PGM/**/__pycache__
 utils/__pycache__
+dpsyn/**/__pycache__
+dpsyn/temp_data
