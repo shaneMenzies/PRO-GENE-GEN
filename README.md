@@ -40,7 +40,7 @@ You can be download the dataset [here](https://dl.cispa.de/s/X2AnxmLrmGtQk7X). W
     data/aml/data-inspect.ipynb
 
 ## Running Experiments
-We investigated 5 representative generative models `VAE`, `GAN`, `Private-PGM`, `PrivSyn`, and `Ron-Gauss`.
+We investigated 5 representative generative models [VAE](./vae/), [GAN](./dp_wgan), [Private-PGM](./Private_PGM), [PrivSyn](./dpsyn), and [RonGauss](./RonGauss).
 
 ### API
 Change to the model directory e.g [vae](./vae)  
