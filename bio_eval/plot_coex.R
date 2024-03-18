@@ -2,7 +2,7 @@ library(readr)
 library(ggplot2)
 library(magrittr)
 
-data <- read_csv('/aml_dataset/bio-eval-paper/outputs/coex_data_k5.csv')
+data <- read_csv('bio_eval/outputs/coex_data_k5.csv')
 real <- dplyr::filter(data, set == 'real')
 data <- dplyr::filter(data, !set == 'real')
 
@@ -79,7 +79,7 @@ g
 
 print(real$correctly_rec[1])
 
-data <- read_csv('/aml_dataset/bio-eval-paper/outputs/coex_data_k1000.csv')
+data <- read_csv('bio_eval/outputs/coex_data_k1000.csv')
 real <- dplyr::filter(data, set == 'real')
 data <- dplyr::filter(data, !set == 'real')
 print(real$correctly_rec[1])
@@ -162,7 +162,7 @@ g2
 cp <- cowplot::plot_grid(g+theme(legend.position = 'none'), g2, nrow=1, rel_widths = c(1,1))
 cp
 
-png(file = paste0('/aml_dataset/bio-eval-paper/coex-plot.png'), bg = "transparent", 
+png(file = paste0('bio_eval/outputs/coex-plot.png'), bg = "transparent", 
     width = 40, height = 10, units = "cm", res=300)
 plot(cp)
 dev.off()
@@ -170,4 +170,4 @@ dev.off()
 data <- rbind(data_summary, data_summary2)
 data$merged <- NULL
 
-write_csv(data, '/aml_dataset/bio-eval-paper/coex-data-summarised.csv')
+write_csv(data, 'bio_eval/outputs/coex-data-summarised.csv')

@@ -16,3 +16,4 @@ Private_PGM/**/__pycache__
 utils/__pycache__
 dpsyn/**/__pycache__
 dpsyn/temp_data
+bio_eval/.gitignore

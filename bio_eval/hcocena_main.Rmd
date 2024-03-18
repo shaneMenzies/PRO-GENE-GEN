@@ -40,10 +40,10 @@ init_object()
 
 ```{r}
 
-init_wd(dir_count_data = "/aml_dataset/bio-eval-paper/VAE/data/k1000/",
-        dir_annotation = "/aml_dataset/bio-eval-paper/VAE/anno/k1000/",
-        dir_reference_files = "/aml_dataset/bio-eval-paper/reference files/",
-        dir_output = "/aml_dataset/bio-eval-paper/VAE/")
+init_wd(dir_count_data = "bio_eval/data/VAE/data/k1000/",
+        dir_annotation = "bio_eval/data/VAE/anno/k1000/",
+        dir_reference_files = "bio_eval/reference files/",
+        dir_output = "bio_eval/")
 
 ```
 
@@ -58,7 +58,7 @@ check_dirs()
   
 ```{r, warning = FALSE}
 
-init_save_folder(name = "hcocena-non-priv-k1000-corr0")
+init_save_folder(name = "VAE-hcocena-non-priv-k1000-corr0")
 
 ```
 
@@ -285,7 +285,7 @@ build_integrated_network(mode = "u", multi_edges = "min")
   
 ```{r compute clusters and plot module heatmap}
 # cluster_calculation(no_of_iterations = 10)
-import_clusters('/aml_dataset/bio-eval-paper/real/k1000_corr0_real_gtc.txt')
+import_clusters('bio_eval/data/real/k1000_corr0_real_gtc.txt')
 plot_cluster_heatmap(cluster_rows = F)
 ```
 
