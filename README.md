@@ -40,7 +40,7 @@ You can be download the dataset [here](https://dl.cispa.de/s/X2AnxmLrmGtQk7X). W
     data/aml/data-inspect.ipynb
 
 ## Running Experiments
-We investigated 5 representative generative models [VAE](./vae/), [GAN](./dp_wgan), [Private-PGM](./Private_PGM), [PrivSyn](./dpsyn), and [RonGauss](./RonGauss).
+We investigated 5 representative generative models [VAE](./vae/), [GAN](./dp_wgan), [Private-PGM](./Private_PGM), [PrivSyn](./dpsyn), and [RonGauss](./Rongauss).
 
 ### API
 Change to the model directory e.g [vae](./vae)  
@@ -65,6 +65,13 @@ For vae model, we provide script to run the membership inference attack;
         year={2024}
         }
 ```
+
+## Acknowledgements
+Our implementation uses the source code from the following repositories:
+[1] [https://github.com/BorealisAI/private-data-generation](https://github.com/BorealisAI/private-data-generation)
+[2] [https://github.com/usnistgov/PrivacyEngCollabSpace/tree/master/tools/de-identification/Differential-Privacy-Synthetic-Data-Challenge-Algorithms/DPSyn](https://github.com/usnistgov/PrivacyEngCollabSpace/tree/master/tools/de-identification/Differential-Privacy-Synthetic-Data-Challenge-Algorithms/DPSyn)
+[3] [https://github.com/MarieOestreich/hCoCena](https://github.com/MarieOestreich/hCoCena)
+[4] [https://github.com/tejuafonja/margctgan](https://github.com/tejuafonja/margctgan)
 
 ## References
 [1] Warnat-Herresthal, S., Perrakis, K., Taschler, B., Becker, M., Baßler, K., Beyer, M., Günther, P., Schulte-Schrepping, J., Seep, L., Klee, K. and Ulas, T., 2020. Scalable prediction of acute myeloid leukemia using high-dimensional machine learning and blood transcriptomics. Iscience, 23(1).
