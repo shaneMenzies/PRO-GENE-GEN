@@ -6,10 +6,12 @@ vae/results
 dp_wgan/results
 Private_PGM/results
 dpsyn/results
+RONgauss/results
 vae/__pycache__
 dp_wgan/__pycache__
 Private_PGM/__pycache__
 dpsyn/__pycache__
+RONgauss/__pycache__
 Private_PGM/**/__pycache__
 utils/__pycache__
 dpsyn/**/__pycache__
