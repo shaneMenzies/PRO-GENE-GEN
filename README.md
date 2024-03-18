@@ -68,10 +68,13 @@ For vae model, we provide script to run the membership inference attack;
 
 ## Acknowledgements
 Our implementation uses the source code from the following repositories:
-[1] [https://github.com/BorealisAI/private-data-generation](https://github.com/BorealisAI/private-data-generation)
-[2] [https://github.com/usnistgov/PrivacyEngCollabSpace/tree/master/tools/de-identification/Differential-Privacy-Synthetic-Data-Challenge-Algorithms/DPSyn](https://github.com/usnistgov/PrivacyEngCollabSpace/tree/master/tools/de-identification/Differential-Privacy-Synthetic-Data-Challenge-Algorithms/DPSyn)
-[3] [https://github.com/MarieOestreich/hCoCena](https://github.com/MarieOestreich/hCoCena)
-[4] [https://github.com/tejuafonja/margctgan](https://github.com/tejuafonja/margctgan)
+- [Private Data Generation](https://github.com/BorealisAI/private-data-generation)
+
+- [DPSyn](https://github.com/usnistgov/PrivacyEngCollabSpace/tree/master/tools/de-identification/Differential-Privacy-Synthetic-Data-Challenge-Algorithms/DPSyn)
+
+- [hCoCena](https://github.com/MarieOestreich/hCoCena)
+
+- [MargCTGAN](https://github.com/tejuafonja/margctgan)
 
 ## References
 [1] Warnat-Herresthal, S., Perrakis, K., Taschler, B., Becker, M., Baßler, K., Beyer, M., Günther, P., Schulte-Schrepping, J., Seep, L., Klee, K. and Ulas, T., 2020. Scalable prediction of acute myeloid leukemia using high-dimensional machine learning and blood transcriptomics. Iscience, 23(1).
