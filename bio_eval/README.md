@@ -2,7 +2,7 @@
 
 In order to reproduce the bio-evaluation results, procede as follows:
 
-1. Download the synthetic data pre-processed for the `hcocena` pipeline.
+1. **Download the synthetic data pre-processed for the `hcocena` pipeline.**
 
 Preprocessing here ony refers to reshaping, no other changes have been performed. Reshaping was necessary because `hcocena` requires as input count data in the shape *genes x samples* and a separate annotation table stating the label per sample.
 
@@ -11,7 +11,7 @@ The data can be downloaded here:
 Please move the data to `/bio_eval/data/`.
 
 
-2. Run `hcocena` analysis
+2. **Run `hcocena` analysis.**
 
 For this, please use `hcocena_main.RMD`.
 
