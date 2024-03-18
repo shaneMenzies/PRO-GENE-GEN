@@ -6,9 +6,9 @@ In order to reproduce the bio-evaluation results, procede as follows:
 
 Preprocessing here ony refers to reshaping, no other changes have been performed. Reshaping was necessary because `hcocena` requires as input count data in the shape *genes x samples* and a separate annotation table stating the label per sample.
 
-The data can be downloaded here:
+The data can be downloaded [here](https://dl.cispa.de/s/CQcrc2foc6rx4QL/download?path=%2F&files=bio-eval-data.zip).
 
-Please move the data to `/bio_eval/data/`.
+Please move the contents of the zipped file to `/bio_eval/data/`.
 
 
 2. **Run `hcocena` analysis.**
