@@ -17,3 +17,7 @@ utils/__pycache__
 dpsyn/**/__pycache__
 dpsyn/temp_data
 bio_eval/.gitignore
+eval/eval_data
+eval/plots
+eval/stats_eval/margctgan
+eval/stats_eval/results
