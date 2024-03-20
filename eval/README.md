@@ -2,7 +2,9 @@
 
 1. **Download the synthetic data.**
 
-    The data can be downloaded [here](https://dl.cispa.de/s/gbqy2WEeyWWNSGX).
+    The data can be downloaded [here](https://dl.cispa.de/s/gbqy2WEeyWWNSGX) or run the script below:
+    
+        bash download_eval_data.sh
 
 2. **Follow instruction in bio_eval to run the biological metrics**
 
