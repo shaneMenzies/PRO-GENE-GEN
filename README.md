@@ -40,12 +40,12 @@ You can be download the dataset [here](https://dl.cispa.de/s/X2AnxmLrmGtQk7X). W
     data/aml/data-inspect.ipynb
 
 ## Running Experiments
-We investigated 5 representative generative models [VAE](./vae/), [GAN](./dp_wgan), [Private-PGM](./Private_PGM), [PrivSyn](./dpsyn), and [Ron-Gauss](./RONgauss).
+We investigated 5 representative generative models [VAE](./models/VAE), [GAN](./models/DP_WGAN), [Private-PGM](./models/Private_PGM), [PrivSyn](./models/DPSYN), and [Ron-Gauss](./models/RONgauss).
 
 ### API
-Change to the model directory e.g [vae](./vae)  
+Change to the model directory e.g [vae](./models/VAE)  
 
-        cd vae
+        cd models/VAE
 
 You can train the model by running the bash script;
 
@@ -60,12 +60,12 @@ The biological and statistical evaluation script for the synthetic data can be f
 
 ## Citation
 ```bibtex
-        @article{chen2024towards,
-        title={Towards Biologically Plausible and Private Gene Expression Data Generation},
-        author={Chen, Dingfan and Oestreich, Marie and Afonja, Tejumade and Kerkouche, Raouf and Becker, Matthias and Fritz, Mario},
-        journal={Proceedings on Privacy Enhancing Technologies},
-        year={2024}
-        }
+@article{chen2024towards,
+  title={Towards Biologically Plausible and Private Gene Expression Data Generation},
+  author={Chen, Dingfan and Oestreich, Marie and Afonja, Tejumade and Kerkouche, Raouf and Becker, Matthias and Fritz, Mario},
+  journal={Proceedings on Privacy Enhancing Technologies},
+  year={2024}
+}
 ```
 
 ## Acknowledgements
