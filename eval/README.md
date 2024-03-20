@@ -2,7 +2,7 @@
 
 1. **Download the synthetic data.**
 
-    The data can be downloaded [here]().
+    The data can be downloaded [here](https://dl.cispa.de/s/gbqy2WEeyWWNSGX).
 
 2. **Follow instruction in bio_eval to run the biological metrics**
 
