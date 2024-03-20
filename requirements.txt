@@ -12,3 +12,4 @@ progress
 seaborn
 scikit-learn
 mkl-service
+nbconvert
