@@ -55,6 +55,8 @@ For vae model, we provide script to run the membership inference attack;
 
         bash loop_mia.sh
 
+### Evaluation
+The biological and statistical evaluation script for the synthetic data can be found in [eval](./eval/) folder. We attached a README which instruct on how to download the `eval_data` used to generate the figures in the paper.
 
 ## Citation
 ```bibtex
