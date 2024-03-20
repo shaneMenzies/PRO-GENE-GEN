@@ -1,0 +1,550 @@
+---
+title: "hCoCena main markdown"
+author: "Marie Oestreich"
+date: "26 2 2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# Introduction
+
+This Markdown contains the base workflow of hcocena. For a fully functional analysis, these steps are mandatory unless declared otherwise (flagged with OPTIONAL). Feel free to expand upon this base analysis with the provided satellite functions or your custom scripts. You will find detailed information on the satellite functions as well as intermediate outputs that you can use for your custom analyses in the repository's Wiki.
+
+
+# Pre-Integration Phase
+
+## load hCoCena package
+```{r}
+library(hcocena)
+```
+
+
+## create hCoCena-Object
+
+```{r}
+init_object()
+```
+
+
+## Working directory setup
+
+  Please set the following parameters to strings that state the path to your expression data, meta data, etc. For more information on the different files and how to pass them to the function, please refer to the following section of the wiki: https://github.com/MarieOestreich/hCoCena/wiki/General-Backgroud-Information#count-files-annotation-files--reference-files
+  
+  + dir_count_data: path of your count files folder, set FALSE if you are NOT loading expression data from files but instead are using existing 
+  data frames in your environment.
+  + dir_annotation: path of your annotation files folder, set FALSE if you are NOT loading annotation data from files but instead are using existing 
+  data frames in your environment.
+  + dir_reference_files: path of your reference files folder (the folder with corresponding files can be downloaded from the github repo https://github.com/MarieOestreich/hCoCena, they are contained in the folder 'reference_files')
+  + dir_output: path to the location in which the save folder for this analyses should be created (e.g., "~/" for your home directory).
+
+```{r}
+
+init_wd(dir_count_data = "bio_eval/data/VAE/data/k1000/",
+        dir_annotation = "bio_eval/data/VAE/anno/k1000/",
+        dir_reference_files = "bio_eval/reference files/",
+        dir_output = "bio_eval/")
+
+```
+
+  Ensure that all directories exist with the following chunk:
+
+```{r check directories}
+check_dirs()
+```
+
+  Please define a folder in which your results shall be saved using the 'name' variable. 
+  The folder is created automatically, if it does not yet exist in the set directory.
+  
+```{r, warning = FALSE}
+
+init_save_folder(name = "VAE-hcocena-non-priv-k1000-corr0")
+
+```
+
+
+## Defining layers
+
+  For detailed information regarding the structures of the count and annotation data as well as different options for providing data, refer to the function documentation by entering ?hcocena::define_layers into the console.
+    
+```{r defining Omics Layers}
+
+define_layers(list( seed_1 = c("fake_nondp_iter10000_k1000_s1000.csv", "fake_nondp_iter10000_k1000_s1000.csv"),
+                    seed_2 = c("fake_nondp_iter10000_k1000_s2000.csv", "fake_nondp_iter10000_k1000_s2000.csv"),
+                    real = c("k1000_none_filterx.csv", "k1000_none_filterx.csv"))
+              )
+
+set_supp_files(Tf = "TFcat.txt", 
+               Hall = "h.all.v6.1.symbols.gmt", 
+               Go = "c5.bp.v7.0.symbols.gmt")
+
+```
+
+
+  
+
+## Define global settings
+
+  For detailed information regarding the different settings, enter ?hcocena::set_global_settings into the console.
+
+```{r global settings}
+
+set_global_settings(organism = "human", 
+    								control_keyword = "none", 
+    								variable_of_interest = "label", 
+    								min_nodes_number_for_network = 40, 
+    								min_nodes_number_for_cluster = 10,
+    								range_GFC = 2.0,
+    								layout_algorithm = "layout_with_fr",
+    								data_in_log = F)
+
+```
+
+
+## Data import
+
+  For detailed information regarding the different parameters, enter ?hcocena::read_data into the console.
+
+
+```{r data import}
+
+read_data(sep_counts = ",",
+           sep_anno = ",", 
+           gene_symbol_col = "SYMBOL",
+           sample_col = "sampleID",
+           count_has_rn = F,
+           anno_has_rn = F)
+
+read_supplementary()
+
+hcobject$data$set1_anno$label <- paste0(strsplit(as.character(hcobject$data$set1_anno$label), "_") %>% sapply(.,"[[",1), " synthetic seed 1") %>% as.factor()
+hcobject$data$set2_anno$label <- paste0(strsplit(as.character(hcobject$data$set2_anno$label), "_") %>% sapply(.,"[[",1), " synthetic seed 2") %>% as.factor()
+hcobject$data$set3_anno$label <- paste0(strsplit(as.character(hcobject$data$set3_anno$label), "_") %>% sapply(.,"[[",1), " real") %>% as.factor()
+
+```
+
+
+## OPTIONAL: Data-Based Definition of Top Most Variant Genes
+
+Find inflection points in the ranked variances to filter for the top most variant genes in a data-driven way. 
+
+
+## Define layer-specific settings
+
+  For detailed information regarding the different settings, enter ?hcocena::set_layer_settings into the console.
+  
+
+```{r layer-specific settings}
+
+set_layer_settings(top_var = rep("all", length(hcobject[["layers"]])), 
+                                     min_corr = rep(0.0, length(hcobject[["layers"]])), 
+                                     range_cutoff_length = rep(100, length(hcobject[["layers"]])),
+                                     print_distribution_plots = rep(F, length(hcobject[["layers"]])))
+
+
+```
+
+
+## OPTIONAL: Visualizing data distribution
+
+  There is an option to plot the distribution of counts for each sample to check for outliers or prominent differences between samples. To do so, refer to "Checking data distribution" in the satellite markdown.
+  
+  
+## OPTIONAL: PCA
+
+  You can visualize your data in a PCA. To do so, please refer to the satellite markdown, section "PCA".
+  
+
+## OPTIONAL: Meta data visualization
+
+  You can visualize your meta data using the "Meta data plots" section in the satellite markdown.
+  
+  
+## Data processing part I
+
+  For detailed information on what happens in this step and what parameters can be set, enter ?hcocena::run_expression_analysis_1 into the console.
+  
+
+```{r expression analysis up to cutoff}
+
+run_expression_analysis_1(corr_method = "pearson")
+
+```
+
+
+
+## Data processing part II
+
+
+  Choosing the cut-offs:
+
+  Set a correlation cut-off for each of your data sets. To aid this choice, the following plot presents the different cut-off statistics per data set. For more details on cut-offs and the information in this plot as well as the parameters, enter ?hcocena::plot_cutoffs into the console.
+  
+  
+```{r fig.height = 8, fig.width = 15}
+
+plot_cutoffs(interactive = T)
+
+```
+  
+  
+  The order in which the cutoffs are subsequently defined must correspond to the order in which the layers have previously been specified.
+  
+
+```{r choose cutoff}
+
+set_cutoff(cutoff_vector = rep(0.0, length(hcobject[["layers"]])))
+
+```
+
+
+  Checking the scale-free topology
+
+  For each data set, the logged degree distribution and the linear regression are plotted to visualize the preservation of the scale-free topology criterion.
+  NOTE: Even though biological networks are generally believed to follow a scale-free topology, experience has shown that a lot of transcriptomics data does not follow this principle perfectly. A deviation from the regression line is often observed at higher x-axis values. 
+
+
+```{r plot degree distribution for chosen cutoff, message = F, warning = F}
+
+plot_deg_dist()
+
+```
+
+
+  Heatmap of top most variant genes and GFC calculation
+
+  This function plots a heatmap for the network genes in each data layer and computes the Group-Fold-Changes for each genes per layer.
+
+
+```{r, fig.width = 10, fig.height = 7}
+
+run_expression_analysis_2()
+
+```
+
+
+```{r}
+library(readr)
+
+# edge set real:
+edges_real <- hcobject[["layer_specific_outputs"]][[paste0("set", length(hcobject$layers))]][["part2"]][["heatmap_out"]][["filt_cutoff_data"]]
+edges_real <- apply(edges_real, 1, function(x){
+  if(x[1] > x[2]){
+    paste0(x[1], '_', x[2])
+  }else{
+    paste0(x[2], '_', x[1])
+  }
+})
+
+coex_rec <- data.frame()
+
+for(i in 1:length(hcobject$layers)){
+  edges <- hcobject[["layer_specific_outputs"]][[paste0("set", i)]][["part2"]][["heatmap_out"]][["filt_cutoff_data"]]
+  edges <- apply(edges, 1, function(x){
+    if(x[1] > x[2]){
+      paste0(x[1], '_', x[2])
+    }else{
+      paste0(x[2], '_', x[1])
+    }
+  })
+  intersec <- length(intersect(edges, edges_real))
+  false_rec <- length(edges)-length(intersect(edges, edges_real))
+  coex_rec <- rbind(coex_rec, data.frame(set = hcobject$layers_names[i], correctly_rec = intersec, falsely_rec=false_rec, score=intersec/false_rec * false_rec/length(edges_real)))
+}
+
+write_csv(coex_rec, paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, '/coex_reconstruction_comparison.csv'))
+
+```
+
+
+# Integration Phase
+
+## Layer integration
+
+  Integrating the layer-specific networks
+  
+  Here, the previously constructed layer-specific networks will be integrated into one network that combines the information. The integration can be based on the union or intersection of layer-specific networks. Edges that are present in several networks with different lengths can be included based on different options. For detailed information, please refer to the Info Pages in the repository's Wiki.
+  
+```{r merge networks}
+
+build_integrated_network(mode = "u", multi_edges = "min")
+
+```
+
+  
+
+# Post-Integration Phase
+
+## Module detection
+
+  Clustering the network
+  
+  In this step, modules of strong co-expression will be detected in the network and their expression pattern across conditions will be represented in a GFC heatmap. For more information on the available clustering algorithms, run ?hcocena::cluster_calculation and visit the repository's Wiki pages.
+  NOTE: You can export your clustering for future use. To do so, please refer to the satellite script, section "Export clustering".
+  NOTE 2: Instead of clustering your network here, you can alternatively import a clustering model. To do so, please use the import_clusters() function (see satellite markdown for infos).
+  
+```{r compute clusters and plot module heatmap}
+# cluster_calculation(no_of_iterations = 10)
+import_clusters('bio_eval/data/real/k1000_corr0_real_gtc.txt')
+plot_cluster_heatmap(cluster_rows = F)
+```
+
+
+
+```{r coex}
+library(ggplot2)
+library(readr)
+
+
+coex_rec <- read_csv(paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, '/coex_reconstruction_comparison.csv'))
+coex_rec <- coex_rec[order(coex_rec$correctly_rec, decreasing = T),]
+coex_rec$set <- factor(coex_rec$set, levels = rev(coex_rec$set))
+
+
+
+reference = dplyr::filter(coex_rec, set=='real')$correctly_rec
+
+coex_rec_summary <- data.frame(rec = c(mean(dplyr::filter(coex_rec, !set=='real')$correctly_rec), 
+                                             mean(dplyr::filter(coex_rec, !set=='real')$falsely_rec)),
+                               sd = c(sd(dplyr::filter(coex_rec, !set=='real')$correctly_rec), sd(dplyr::filter(coex_rec, !set=='real')$falsely_rec)),
+                               dir = c('correct', 'false'),
+                               set='synthetic')
+# coex_rec_summary$set <- factor(coex_rec_summary$set, levels = c('synthetic', 'real'))
+
+p <- ggplot(coex_rec_summary, aes(x=set,y=rec, fill=dir))+
+  geom_bar(stat="identity", position=position_dodge())+
+  geom_errorbar(aes(ymin=rec-sd, ymax=rec+sd), width=.2,
+                 position=position_dodge(.9))+
+  scale_fill_manual(values = c('#50c1de', '#ba3061'))+
+  coord_flip()+
+  theme_bw()+
+  geom_hline(yintercept = reference,
+             linewidth=.5, linetype='dashed')+
+  theme(# remove the vertical grid lines
+           panel.grid.major.y  = element_blank(),
+           panel.grid.minor = element_blank(),
+           legend.title=element_blank())+
+  ylab(paste0('coexpressions with r > ', hcobject$cutoff_vec[1]))+
+  xlab('')+
+  ggtitle('Co-Expression Preservation')
+p
+
+
+
+
+png(file = paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, "/Co-expressions.png"), bg = "transparent", 
+    width = 12, height = 8, units = "cm", res=300)
+plot(p)
+dev.off()
+
+```
+
+
+
+
+
+```{r DE boxplot}
+library(magrittr)
+library(stringr)
+anno_colname_class <- "label"
+
+DE_genes = list()
+for(i in 1:length(hcobject$layers)){
+
+  res = list()
+  counts = hcobject$data[[paste0('set', i, '_counts')]]
+  counts[is.na(counts)] <- 0
+  up = scran::pairwiseWilcox(counts,
+                             groups = hcobject$data[[paste0('set', i, '_anno')]][[anno_colname_class]],
+                             direction = 'up')
+
+  
+  down = scran::pairwiseWilcox(counts,
+                               groups = hcobject$data[[paste0('set', i, '_anno')]][[anno_colname_class]],
+                               direction = 'down')
+
+  
+  # first = sapply(strsplit(up$pairs$first,"_"), `[`, 1)
+  # second = sapply(strsplit(up$pairs$second,"_"), `[`, 1)
+  first <- up$pairs$first %>% str_replace_all(., ' synthetic seed 1', '') %>% 
+                   str_replace_all(., ' synthetic seed 2', '')%>% 
+                   str_replace_all(., ' real', '')
+  
+  second <- up$pairs$second %>% str_replace_all(., ' synthetic seed 1', '') %>% 
+                   str_replace_all(., ' synthetic seed 2', '')%>% 
+                   str_replace_all(., ' real', '')
+
+  pairs = paste0(first, '_', second)
+  print(pairs)
+
+  for(j in 1:length(pairs)){
+
+    signif_up = rownames(dplyr::filter(as.data.frame(up[["statistics"]][[j]]), p.value <0.05))
+    signif_down = rownames(dplyr::filter(as.data.frame(down[["statistics"]][[j]]), p.value <0.05))
+    res[[pairs[j]]][['up']] = signif_up
+    res[[pairs[j]]][['down']] = signif_down
+  }
+  
+  DE_genes[[hcobject$layers_names[i]]] = res
+  
+}
+
+unique_comparisons = c()
+for(comp in names(DE_genes$real)){
+
+  spl = strsplit(comp %>% str_replace_all(., ' synthetic seed 1', '') %>% 
+                   str_replace_all(., ' synthetic seed 2', '')%>% 
+                   str_replace_all(., ' real', ''), 
+                 split = '_') %>% unlist()
+
+  if(spl[1]< spl[2]){
+    unique_comparisons = c(unique_comparisons, paste0(spl[1], '_', spl[2]))
+  }else{
+    unique_comparisons = c(unique_comparisons, paste0(spl[2], '_', spl[1]))
+  }
+}
+unique_comparisons = unique(unique_comparisons)
+
+DE_correct = list()
+for(i in 1:length(names(DE_genes))){
+  set1 = names(DE_genes)[i]
+  set2 = names(DE_genes)[length(names(DE_genes))] # == 'real'
+  comp = paste0(set1, '_vs_', set2)
+  DE_correct[[comp]] = list()
+  DE_correct[[comp]][['up']] = c()
+  DE_correct[[comp]][['down']] = c()
+  
+  for(j in unique_comparisons){
+    inter_up =  length(intersect(DE_genes[[set1]][[j]][['up']], DE_genes[[set2]][[j]][['up']]))/length(DE_genes[[set1]][[j]][['up']])
+    inter_down = length(intersect(DE_genes[[set1]][[j]][['down']], DE_genes[[set2]][[j]][['down']]))/length(DE_genes[[set1]][[j]][['down']])
+    DE_correct[[comp]][['up']] = append(DE_correct[[comp]][['up']], c(inter_up))
+    DE_correct[[comp]][['down']] = append(DE_correct[[comp]][['down']], c(inter_down))
+  }
+}
+
+DE_TP = list()
+DE_FP = list()
+for(i in 1:length(names(DE_genes))){
+  set1 = names(DE_genes)[i]
+  set2 = names(DE_genes)[length(names(DE_genes))] # == 'real'
+  comp = paste0(set1, '_vs_', set2)
+  DE_TP[[comp]] = list()
+  DE_TP[[comp]][['up']] = c()
+  DE_TP[[comp]][['down']] = c()
+  
+  DE_FP[[comp]] = list()
+  DE_FP[[comp]][['up']] = c()
+  DE_FP[[comp]][['down']] = c()
+  
+  for(j in unique_comparisons){
+    P = DE_genes[[set1]][[j]][['up']]
+    TP = intersect(DE_genes[[set1]][[j]][['up']], DE_genes[[set2]][[j]][['up']])
+    FP = base::setdiff(DE_genes[[set1]][[j]][['up']], DE_genes[[set2]][[j]][['up']])
+    
+    N = base::setdiff(rownames(hcobject$data[[paste0('set1_counts')]]), DE_genes[[set1]][[j]][['up']])
+    FN = N[N %in% DE_genes[[set2]][[j]][['up']]]
+    TN = N[!N %in% FN]
+    
+    TPR_up = length(TP)/(length(TP)+length(FN))
+    FPR_up = length(FP)/(length(FP)+length(TN))
+    
+    P = DE_genes[[set1]][[j]][['down']]
+    TP = intersect(DE_genes[[set1]][[j]][['down']], DE_genes[[set2]][[j]][['down']])
+    FP = base::setdiff(DE_genes[[set1]][[j]][['down']], DE_genes[[set2]][[j]][['down']])
+    
+    N = base::setdiff(rownames(hcobject$data[[paste0('set1_counts')]]), DE_genes[[set1]][[j]][['down']])
+    FN = N[N %in% DE_genes[[set2]][[j]][['down']]]
+    TN = N[!N %in% FN]
+    
+    TPR_down = length(TP)/(length(TP)+length(FN))
+    FPR_down = length(FP)/(length(FP)+length(TN))
+    
+
+    DE_TP[[comp]][['up']] = append(DE_TP[[comp]][['up']], c(TPR_up))
+    DE_TP[[comp]][['down']] = append(DE_TP[[comp]][['down']], c(TPR_down))
+    
+    DE_FP[[comp]][['up']] = append(DE_FP[[comp]][['up']], c(FPR_up))
+    DE_FP[[comp]][['down']] = append(DE_FP[[comp]][['down']], c(FPR_down))
+  }
+}
+plot_tpr <- data.frame()
+for(n in names(DE_TP)){
+  n_clean <- strsplit(n, '_vs_')[[1]][1] %>% str_replace(., '_', ' ')
+  
+  tmp = data.frame(correct = DE_TP[[n]] %>% unlist(),
+             direction = rep(c('up', 'down'), each=length(unique_comparisons)), 
+             comparison = paste0(n_clean, ' ', rep(c('up', 'down'), each=length(unique_comparisons))))
+  plot_tpr <- rbind(plot_tpr, tmp)
+}
+plot_tpr <- dplyr::filter(plot_tpr, !comparison %in% c('real up', 'real down'))
+plot_tpr$seed <- str_replace(plot_tpr$comparison, " up", "") %>% 
+  str_replace(., " down", "") %>% 
+  str_replace(., "seed ", "") 
+plot_tpr$comparison <- unique_comparisons
+
+
+plot_fpr <- data.frame()
+for(n in names(DE_FP)){
+  n_clean <- strsplit(n, '_vs_')[[1]][1] %>% str_replace(., '_', ' ')
+  
+  tmp = data.frame(correct = DE_FP[[n]] %>% unlist(),
+             direction = rep(c('up', 'down'), each=length(unique_comparisons)), 
+             comparison = paste0(n_clean, ' ', rep(c('up', 'down'), each=length(unique_comparisons))))
+  plot_fpr <- rbind(plot_fpr, tmp)
+}
+plot_fpr <- dplyr::filter(plot_fpr, !comparison %in% c('real up', 'real down'))
+plot_fpr$seed <- str_replace(plot_fpr$comparison, " up", "") %>% 
+  str_replace(., " down", "") %>% 
+  str_replace(., "seed ", "") 
+plot_fpr$comparison <- unique_comparisons
+
+write_csv(plot_fpr, paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, '/DE_data_fpr.csv'))
+write_csv(plot_tpr, paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, '/DE_data_tpr.csv'))
+
+
+plot_df <- data.frame()
+for(n in names(DE_correct)){
+  n_clean <- strsplit(n, '_vs_')[[1]][1] %>% str_replace(., '_', ' ')
+  
+  tmp = data.frame(correct = DE_correct[[n]] %>% unlist(),
+             direction = rep(c('up', 'down'), each=length(unique_comparisons)), 
+             comparison = paste0(n_clean, ' ', rep(c('up', 'down'), each=length(unique_comparisons))))
+  plot_df <- rbind(plot_df, tmp)
+}
+plot_df <- dplyr::filter(plot_df, !comparison %in% c('real up', 'real down'))
+
+library(ggplot2)
+p = ggplot()+
+  geom_boxplot(data = plot_df, aes(x= comparison, y=correct, fill=direction))+
+  theme_bw()+
+  ylim(c(0,1))+
+  scale_fill_manual(values=rep(c("#999999", "#e3e3e3"),2*length(hcobject$layers_names)))+
+  ggtitle('DE-Gene Preservation')+
+  theme(axis.text.x = element_text(angle=90))+
+  ylab('correctly reconstructed DE genes \n across class comparisons [%]')+
+  xlab('')
+p
+
+png(file = paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, '/DE-genes.png'), bg = "transparent", 
+    width = 12, height = 8, units = "cm", res=300)
+plot(p)
+dev.off()
+
+plot_df$seed <- str_replace(plot_df$comparison, " up", "") %>% 
+  str_replace(., " down", "") %>% 
+  str_replace(., "seed ", "") 
+plot_df$comparison <- unique_comparisons
+
+write_csv(plot_df, paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, '/DE_data.csv'))
+
+```
+
+
+```{r}
+
+png(file = paste0(hcobject$working_directory$dir_output, hcobject$global_settings$save_folder, '/module_heatmap.png'), bg = "transparent", 
+    width = 25, height = 15, units = "cm", res=300)
+hcobject[["integrated_output"]][["cluster_calc"]][["heatmap_cluster"]]
+dev.off()
+```
+
