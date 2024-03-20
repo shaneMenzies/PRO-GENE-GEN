@@ -35,7 +35,11 @@ This implementation is based on [PyTorch](https://pytorch.org/) (tested for vers
 ## Dataset
 The generative models were trained on a bulk RNA-seq dataset compiled by Warnat-Herresthal[1]. Each row represents a biological specimen obtained from a patient, while each column indicates the expression level of a particular gene. The expression levels are quantified by RNA-seq counts, with higher integer values indicating greater gene activity. It comprises samples from 5 disease classes, 4 classes of which are types of leukemia and the fifth class is the category 'Other', which is made up of samples from various other diseases as well as healthy controls. The 4 leukemia types are acute myeloid leukemia (AML), acute lymphocytic leukemia (ALL), chronic myeloid leukemia (CML) and chronic lymphocytic leukemia (CLL).
 
-You can be download the dataset [here](https://dl.cispa.de/s/X2AnxmLrmGtQk7X). We have also prepared a notebook to inspect the dataset and preprocess.
+You can be download the dataset [here](https://dl.cispa.de/s/paWjy4mzE5zkzM5) or run the script below:
+
+        bash download_aml.sh
+           
+ We have also prepared a notebook to inspect the dataset and preprocess.
 
     data/aml/data-inspect.ipynb
 
