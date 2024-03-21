@@ -2,7 +2,7 @@
 
 1. **Download the synthetic data.**
 
-    The data can be downloaded [here]() or run the script below:
+    The data can be downloaded [here](https://dl.cispa.de/s/fgL5StLMpKoa6CE) or run the script below:
     
         bash download_eval_data.sh
 
