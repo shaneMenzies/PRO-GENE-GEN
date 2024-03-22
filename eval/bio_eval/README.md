@@ -8,7 +8,7 @@ Preprocessing here ony refers to reshaping, no other changes have been performed
 
 The data can be downloaded [here](https://dl.cispa.de/s/fgL5StLMpKoa6CE/download/eval_data.zip).
 
-Please move the contents of the zipped file to `/bio_eval/data/`.
+Please make sure the contents of the zipped file are located at `/eval/eval_data/`.
 
 
 2. **Run `hcocena` analysis.**
