@@ -5,7 +5,7 @@ library(magrittr)
 
 
 
-data1 <- read_csv('bio_eval/outputs/DE_data_tpr_0_k5.csv')
+data1 <- read_csv('./outputs/DE_data_tpr_0_k5.csv')
 
 data_summary <- data.frame()
 
@@ -29,7 +29,7 @@ for(m in unique(data1$model)){
 data_summary$epsilon <- factor(data_summary$epsilon, levels = c('5', '10', '20', '50', '100', 'non-priv'))
 data_summary$seed <- 'k5'
 
-data2 <- read_csv('bio_eval/outputs/DE_data_fpr_0_k5.csv')
+data2 <- read_csv('./outputs/DE_data_fpr_0_k5.csv')
 
 data_summary2 <- data.frame()
 
@@ -81,7 +81,7 @@ g
 
 
 
-data1 <- read_csv('bio_eval/outputs/DE_data_tpr_0_k1000.csv')
+data1 <- read_csv('./outputs/DE_data_tpr_0_k1000.csv')
 
 data_summary <- data.frame()
 
@@ -106,7 +106,7 @@ data_summary$epsilon <- factor(data_summary$epsilon, levels = c('5', '10', '20',
 data_summary$seed <- 'k1000'
 
 
-data2 <- read_csv('bio_eval/outputs/DE_data_fpr_0_k1000.csv')
+data2 <- read_csv('./outputs/DE_data_fpr_0_k1000.csv')
 
 data_summary2 <- data.frame()
 
@@ -163,7 +163,7 @@ g2
 cp1 <- cowplot::plot_grid(g, g2, nrow=1)
 cp1
 
-png(file = paste0('bio_eval/outputs/DE-plots-TPR-FPR.png'), bg = "transparent",
+png(file = paste0('./outputs/DE-plots-TPR-FPR.png'), bg = "transparent",
     width = 30, height = 10, units = "cm", res=300)
 plot(cp1)
 dev.off()

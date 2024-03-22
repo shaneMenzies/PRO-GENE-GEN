@@ -39,11 +39,16 @@ init_object()
   + dir_output: path to the location in which the save folder for this analyses should be created (e.g., "~/" for your home directory).
 
 ```{r}
+wd = getwd()
+init_wd(dir_count_data = "../eval_data/VAE/hcocena/data/k1000/",
+        dir_annotation = "../eval_data/VAE/hcocena/anno/k1000/",
+        dir_reference_files = "./reference files/",
+        dir_output ="./")
 
-init_wd(dir_count_data = "bio_eval/data/VAE/data/k1000/",
-        dir_annotation = "bio_eval/data/VAE/anno/k1000/",
-        dir_reference_files = "bio_eval/reference files/",
-        dir_output = "bio_eval/")
+# init_wd(dir_count_data = paste0(wd, "/eval/eval_data/VAE/hcocena/data/k1000/"),
+#         dir_annotation = paste0(wd, "/eval/eval_data/VAE/hcocena/anno/k1000/"),
+#         dir_reference_files = paste0(wd, "/eval/bio_eval/reference files/"),
+#         dir_output = paste0(wd, "/eval/bio_eval/"))
 
 ```
 
@@ -285,7 +290,7 @@ build_integrated_network(mode = "u", multi_edges = "min")
   
 ```{r compute clusters and plot module heatmap}
 # cluster_calculation(no_of_iterations = 10)
-import_clusters('bio_eval/data/real/k1000_corr0_real_gtc.txt')
+import_clusters('../eval_data/Real Data/k1000_corr0_real_gtc.txt')
 plot_cluster_heatmap(cluster_rows = F)
 ```
 
