@@ -49,6 +49,9 @@ class Private_PGM:
     def train(self, train_df, config, cliques=None, num_iters=10000):
         domain = Domain(config.keys(), config.values())
         data = Dataset(train_df, domain)
+
+        self.target_dist = train_df[self.target_variable]
+
         total = data.df.shape[0]
 
         if self.enable_privacy:
@@ -77,6 +80,8 @@ class Private_PGM:
                 y = x + np.random.laplace(loc=0, scale=sigma, size=x.size)
                 measurements.append((I, y, sigma, (col,)))
 
+        print("Initial Measurements done")
+
         # spend half of privacy budget to measure 2 way marginals with the target variable
         if cliques is None:
             cliques = []
@@ -100,11 +105,17 @@ class Private_PGM:
                 y = x + np.random.laplace(loc=0, scale=sigma, size=x.size)
                 measurements.append((I, y, sigma, cl))
 
+        print("Final Measurements done")
+
         engine = FactoredInference(domain, log=True, iters=num_iters)
         self.model = engine.estimate(measurements, total=total, engine="MD")
 
-    def generate(self, num_rows=None):
-        syn_df = self.model.synthetic_data(rows=num_rows).df
+    def generate(self, num_rows=None, target_dist=None):
+        #syn_df = self.model.synthetic_data(rows=num_rows).df
+        if target_dist is not None:
+            num_rows = len(target_dist)
+            target_dist = (self.target_variable, target_dist)
+        syn_df = self.model.synthetic_data(rows=num_rows, seed=target_dist).df
         X_syn = syn_df.drop([self.target_variable], axis=1).values
         y_syn = syn_df[self.target_variable].values
         return np.concatenate([X_syn, np.expand_dims(y_syn, axis=1)], axis=1)

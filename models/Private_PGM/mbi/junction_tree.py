@@ -5,7 +5,6 @@ import itertools
 import numpy as np
 from collections import OrderedDict
 
-
 class JunctionTree:
     """A JunctionTree is a transformation of a GraphicalModel into a tree structure.  It is used
     to find the maximal cliques in the graphical model, and for specifying the message passing
@@ -57,6 +56,7 @@ class JunctionTree:
         G = nx.Graph(self.graph)
         for node in order:
             tmp = set(itertools.combinations(G.neighbors(node), 2))
+            test = list(itertools.combinations(G.neighbors(node), 2))
             edges |= tmp
             G.add_edges_from(tmp)
             G.remove_node(node)
@@ -96,6 +96,8 @@ class JunctionTree:
             else:
                 a = min(cost, key=lambda a: cost[a])
 
+            print(a, cost[a])
+
             # do some cleanup
             order.append(a)
             unmarked.remove(a)
@@ -107,12 +109,49 @@ class JunctionTree:
 
         return order, total_cost
 
+    def _greedy_order_opt(self) -> tuple[list[str], int]:
+        """Compute a greedy elimination order."""
+        order = []
+        domain, cliques = self.domain, self.cliques
+        unmarked = list(domain.attrs)
+
+        graph = self.graph.copy()
+
+        cost = {}
+        for a in unmarked:
+            neighbors = graph.neighbors(a)
+            cost[a] = domain.project_size_opt(neighbors) * domain[a]
+
+        total_cost = 0
+        for _ in range(len(unmarked)):
+            keys = np.array([*cost.keys()]).flatten()
+            sizes = np.array([domain[k] for k in cost.keys()]).flatten()
+            costs = np.array([*cost.values()]).flatten()
+            min_cost = costs.min()
+            
+            # Minimize future cost by checking sizes
+            options = np.where(costs == min_cost)
+            option_sizes = sizes[options]
+            choice = options[option_sizes.argmax()][0]
+            a = keys[choice]
+
+            order.append(a)
+            unmarked.remove(a)
+            for b in graph.neighbors(a):
+                if b in cost:
+                    cost[b] //= domain[a]
+            graph.remove_node(a)
+            total_cost += cost[a]
+            del cost[a]
+
+        return order, total_cost
+
     def _make_tree(self, order=None):
         if order is None:
             # orders = [self._greedy_order(stochastic=True) for _ in range(1000)]
             # orders.append(self._greedy_order(stochastic=False))
             # order = min(orders, key=lambda x: x[1])[0]
-            order = self._greedy_order(stochastic=False)[0]
+            order, total_cost = self._greedy_order_opt()
         self.elimination_order = order
         tri, cost = self._triangulated(order)
         # cliques = [tuple(c) for c in nx.find_cliques(tri)]

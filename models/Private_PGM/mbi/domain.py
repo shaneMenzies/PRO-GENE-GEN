@@ -1,6 +1,7 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the {root}/models/Private_PGM/ directory of this source tree.
 from functools import reduce
+from collections.abc import Sequence
 
 
 class Domain:
@@ -31,6 +32,9 @@ class Domain:
             attrs = [attrs]
         shape = tuple(self.config[a] for a in attrs)
         return Domain(attrs, shape)
+
+    def project_size_opt(self, attributes: Sequence[str]) -> int: 
+        return reduce(lambda x, y: x * y, [self.config[a] for a in attributes], 1)
 
     def marginalize(self, attrs):
         """marginalize out some attributes from the domain (opposite of project)

@@ -64,7 +64,9 @@ class GraphicalModel:
                 if set(attrs) <= set(cl):
                     return self.marginals[cl].project(attrs)
 
+        print("Didn't have marginals")
         elim = self.domain.invert(attrs)
+        print(elim)
         elim_order = greedy_order(self.domain, self.cliques, elim)
         # elim_order = [a for a in self.elimination_order if a in elim]
         factors = []
@@ -207,12 +209,16 @@ class GraphicalModel:
             potentials[cl] = marginals[cl].log() - marginals[cl].project(new).log()
         return CliqueVector(potentials)
 
-    def synthetic_data(self, rows=None):
+    def synthetic_data(self, rows=None, seed=None):
         """Generate synthetic tabular data from the distribution"""
+        print("Synthetic data start")
         total = int(self.total) if rows is None else rows
         cols = self.domain.attrs
         data = np.zeros((total, len(cols)), dtype=int)
         df = pd.DataFrame(data, columns=cols)
+
+        if seed is not None:
+            df[seed[0]] = seed[1]
 
         cliques = [set(cl) for cl in self.cliques]
 
@@ -232,10 +238,14 @@ class GraphicalModel:
             return vals
 
         order = self.elimination_order[::-1]
+        if seed is not None:
+            order.remove(seed[0])
         col = order[0]
         marg = self.project([col]).datavector(flatten=False)
         df.loc[:, col] = synthetic_col(marg, total)
         used = {col}
+        if seed is not None:
+            used.add(seed[0])
 
         for col in order[1:]:
             relevant = [cl for cl in cliques if col in cl]
@@ -251,11 +261,14 @@ class GraphicalModel:
                 return group
 
             if len(proj) >= 1:
+                print(col)
                 df = df.groupby(list(proj)).apply(foo)
                 df = df.reset_index(drop=True)  # updated
             else:
+                print(col)
                 df[col] = synthetic_col(marg, df.shape[0])
 
+        print("Synthetic data generated")
         return Dataset(df, self.domain)
 
 
