@@ -130,9 +130,9 @@ class JunctionTree:
             min_cost = costs.min()
             
             # Minimize future cost by checking sizes
-            options = np.where(costs == min_cost)
+            options = np.where(costs == min_cost)[0]
             option_sizes = sizes[options]
-            choice = options[option_sizes.argmax()][0]
+            choice = options[option_sizes.argmax()]
             a = keys[choice]
 
             order.append(a)
